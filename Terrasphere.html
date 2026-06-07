@@ -1,0 +1,3322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>TerraSphere | Professional Complex Multi-Axis Layout</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts for map specific (DM Mono) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Cormorant+Garamond:ital,wght@0,600;1,400&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-orange: #ff6b35;
+      --dark-orange: #dd521b;
+      --light-orange: #ff8b60;
+      --bg-deep-black: #0d0d0d;
+      --bg-dark-gray: #161616;
+      --bg-card-dark: #1f1f1f;
+      --text-light: #f5f5f7;
+      --text-gray: #a1a1a6;
+      --footer-bg: #080808;
+      --card-border: rgba(255, 107, 53, 0.15);
+      --glow-orange: rgba(255, 107, 53, 0.2);
+
+      /* Map specific variables */
+      --orange: #ff6b35;
+      --orange-dim: rgba(255, 107, 53, 0.3);
+      --bg: #06060f;
+      --card-bg: rgba(14, 14, 28, 0.85);
+      --muted: #6b6b8a;
+      --continent: #1e1e2a;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg-deep-black);
+      color: var(--text-light);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 85px;
+      background: rgba(13, 13, 13, 0.8);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg,
+          var(--primary-orange),
+          var(--dark-orange));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 15px var(--glow-orange);
+    }
+
+    .logo-icon::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--text-light);
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .logo-text h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-light);
+      line-height: 1;
+    }
+
+    .logo-text span {
+      font-size: 9px;
+      color: var(--primary-orange);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-light);
+    }
+
+    .cta-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-light);
+      padding: 12px 26px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cta-btn:hover {
+      background: var(--text-light);
+      color: var(--bg-deep-black);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    /* SCROLL INDICATOR */
+    .direction-indicator {
+      position: fixed;
+      top: 110px;
+      right: 60px;
+      background: rgba(31, 31, 31, 0.85);
+      backdrop-filter: blur(10px);
+      color: var(--text-light);
+      padding: 10px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .direction-indicator .light-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary-orange);
+    }
+
+    /* VIEWPORT MATRIX CANVAS */
+    .master-container {
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .viewport-grid-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    /* SURFACE SECTIONS */
+    .matrix-section {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      padding-top: 85px;
+      background: var(--bg-deep-black);
+      overflow: hidden;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 45px;
+    }
+
+    .section-header h2 {
+      font-family: "Inter", sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-header p {
+      color: var(--text-gray);
+      font-size: 15px;
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* HERO LAYER */
+    .hero-section {
+      display: flex;
+      height: calc(100vh - 85px);
+      align-items: center;
+      padding: 0 80px;
+      gap: 60px;
+    }
+
+    .hero-left {
+      flex: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+    }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff6b35;
+      box-shadow: 0 0 15px #ff6b35;
+    }
+
+    .hero-title {
+      font-size: 72px;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -3px;
+      color: white;
+      margin-bottom: 28px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ff6b35, #ffb347, #ffd27a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 620px;
+      font-size: 18px;
+      line-height: 1.9;
+      color: #9b9b9b;
+      margin-bottom: 45px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 45px;
+    }
+
+    .btn-primary {
+      height: 58px;
+      padding: 0 38px;
+      border: none;
+      border-radius: 18px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, #ff6b35, #ff8f4f);
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(255, 107, 53, 0.35);
+      transition: 0.35s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 50px rgba(255, 107, 53, 0.45);
+    }
+
+    .btn-outline {
+      height: 58px;
+      padding: 0 38px;
+      border-radius: 18px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(20px);
+      transition: 0.35s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 18px;
+    }
+
+    .hero-stat-card {
+      min-width: 150px;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(30px);
+    }
+
+    .hero-stat-card h3 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .hero-stat-card span {
+      color: #8d8d8d;
+      font-size: 13px;
+    }
+
+    .hero-right {
+      width: 50%;
+      height: 70%;
+      background: var(--bg-dark-gray);
+      border-radius: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* MAP STYLES (fully integrated from original map component) */
+    .map-outer {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+    }
+
+    .map-outer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 55% 50%, rgba(255, 107, 53, 0.07), transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .map-card {
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 20, 0.9);
+      border: 1px solid rgba(255, 107, 53, 0.18);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: transform 0.12s linear, box-shadow 0.2s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 107, 53, 0.08);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(12, 12, 22, 0.95);
+    }
+
+    .map-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .filter-select {
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.25);
+      color: var(--orange);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .filter-select option {
+      background: #0d0d1a;
+      color: #fff;
+    }
+
+    .svg-container {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+
+    #worldMap {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+    }
+
+    .continent {
+      fill: var(--continent);
+      stroke: rgba(255, 107, 53, 0.3);
+      stroke-width: 1;
+      transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease, opacity 0.4s ease;
+      cursor: pointer;
+    }
+
+    .continent:hover {
+      fill: rgba(255, 107, 53, 0.15);
+      stroke: #ff6b35;
+      stroke-width: 2.5;
+    }
+
+    .continent.dimmed {
+      opacity: 0.28;
+    }
+
+    .continent.highlighted {
+      stroke: #ff6b35;
+      stroke-width: 2;
+      stroke-dasharray: 6 3;
+    }
+
+    .grid-line {
+      stroke: rgba(255, 255, 255, 0.04);
+      stroke-width: 0.5;
+    }
+
+    .grid-label {
+      font-size: 8px;
+      fill: rgba(255, 255, 255, 0.15);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .continent-label {
+      font-size: 9px;
+      fill: #a1a1a6;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .marker-group {
+      cursor: pointer;
+    }
+
+    .marker-core {
+      fill: #ff6b35;
+      filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.9));
+    }
+
+    .marker-ring {
+      fill: none;
+      stroke: #ff6b35;
+      stroke-width: 1.2;
+      opacity: 0;
+      animation: ring-expand 2.2s ease-out infinite;
+    }
+
+    .marker-ring.r2 {
+      animation-delay: 0.7s;
+    }
+
+    .marker-ring.r3 {
+      animation-delay: 1.4s;
+    }
+
+    @keyframes ring-expand {
+      0% {
+        r: 6;
+        opacity: 0.7;
+      }
+
+      100% {
+        r: 22;
+        opacity: 0;
+      }
+    }
+
+    .marker-label {
+      font-size: 8px;
+      fill: rgba(255, 255, 255, 0.7);
+      font-family: 'DM Mono', monospace;
+      pointer-events: none;
+    }
+
+    .marker-sublabel {
+      font-size: 6.5px;
+      fill: rgba(255, 107, 53, 0.8);
+      font-family: 'DM Mono', monospace;
+      pointer-events: none;
+    }
+
+    .map-tooltip {
+      position: absolute;
+      background: rgba(12, 12, 22, 0.95);
+      border: 1px solid rgba(255, 107, 53, 0.35);
+      border-radius: 12px;
+      padding: 12px 16px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #fff;
+      z-index: 50;
+      white-space: nowrap;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .map-tooltip .tt-name {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .map-tooltip .tt-type {
+      color: var(--orange);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .map-tooltip .tt-val {
+      color: #a1a1a6;
+      margin-top: 4px;
+      font-size: 10px;
+    }
+
+    .map-legend {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(12, 12, 22, 0.95);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .map-shadow {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      pointer-events: none;
+      transition: background 0.1s;
+      z-index: 2;
+    }
+
+    /* PROCESS LAYER & OTHER SECTIONS REMAIN IDENTICAL */
+    .process-section,
+    .pricing-section,
+    .about-team-section,
+    .services-section,
+    .testimonials-section,
+    .stats-section,
+    .footer-section {
+      /* existing styles preserved */
+    }
+
+    .process-section,
+    .pricing-section,
+    .about-team-section,
+    .services-section,
+    .testimonials-section,
+    .stats-section,
+    .footer-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 85px);
+      padding: 0 80px;
+    }
+
+    .title-section {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      color: #ff6b35;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      backdrop-filter: blur(20px);
+    }
+
+    .process-container {
+      display: flex;
+      gap: 40px;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .process-step {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border-radius: 32px;
+      padding: 45px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex: 1;
+    }
+
+    .pricing-grid {
+      display: flex;
+      gap: 30px;
+    }
+
+    .listing-card {
+      background: var(--bg-dark-gray);
+      width: 320px;
+      border-radius: 28px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255, 107, 53, 0.4);
+      transition: all 0.35s ease;
+    }
+
+    .card-img {
+      height: 180px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .team-card {
+      background: rgba(12, 14, 22, 0.8);
+      backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid rgba(255, 107, 53, 0.4);
+    }
+
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      border: 3px solid #ff6b35;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .service-card {
+      background: var(--bg-dark-gray);
+      padding: 40px 30px;
+      border-radius: 24px;
+    }
+
+    .testimonials-grid {
+      display: flex;
+      gap: 36px;
+      max-width: 1280px;
+      width: 100%;
+    }
+
+    .testimonial-card {
+      background: rgba(17, 22, 28, 0.75);
+      backdrop-filter: blur(2px);
+      flex: 1;
+      padding: 40px 36px;
+      border-radius: 42px;
+      border: 1px solid rgba(243, 156, 18, 0.18);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      width: 100%;
+      max-width: 1300px;
+    }
+
+    .stat-card {
+      padding: 50px 30px;
+      border-radius: 32px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2.3fr 1fr 1.5fr;
+      gap: 90px;
+      padding: 55px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border-radius: 36px;
+    }
+
+    .progress-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: var(--primary-orange);
+      width: 0%;
+      z-index: 2000;
+      transition: width 0.3s ease;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(15px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-dark-gray);
+      padding: 45px;
+      border-radius: 32px;
+      max-width: 480px;
+      width: 90%;
+    }
+
+    @media(max-width:900px) {
+      .hero-section {
+        flex-direction: column;
+        padding: 40px 24px;
+        overflow-y: auto;
+      }
+
+      .hero-right {
+        width: 100%;
+        height: 50%;
+      }
+
+      .map-outer {
+        height: 100%;
+      }
+    }
+
+    /* -------------------- */
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 85px;
+      background: rgba(13, 13, 13, 0.8);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg,
+          var(--primary-orange),
+          var(--dark-orange));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 15px var(--glow-orange);
+    }
+
+    .logo-icon::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--text-light);
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .logo-text h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-light);
+      line-height: 1;
+    }
+
+    .logo-text span {
+      font-size: 9px;
+      color: var(--primary-orange);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-light);
+    }
+
+    .cta-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-light);
+      padding: 12px 26px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cta-btn:hover {
+      background: var(--text-light);
+      color: var(--bg-deep-black);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    /* SCROLL INDICATOR */
+    .direction-indicator {
+      position: fixed;
+      top: 110px;
+      right: 60px;
+      background: rgba(31, 31, 31, 0.85);
+      backdrop-filter: blur(10px);
+      color: var(--text-light);
+      padding: 10px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .direction-indicator .light-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary-orange);
+    }
+
+    /* VIEWPORT MATRIX CANVAS */
+    .master-container {
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .viewport-grid-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    /* SURFACE SECTIONS */
+    .matrix-section {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      padding-top: 85px;
+      background: var(--bg-deep-black);
+      overflow: hidden;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 45px;
+    }
+
+    .section-header h2 {
+      font-family: "Inter", sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-header p {
+      color: var(--text-gray);
+      font-size: 15px;
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* HERO LAYER */
+    /* .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: calc(100vh - 85px);
+        padding: 0 7vw;
+        gap: 80px;
+        position: relative;
+      } */
+    .hero-section {
+      display: flex;
+      height: calc(100vh - 85px);
+      align-items: center;
+      padding: 0 80px;
+      gap: 60px;
+    }
+
+    .hero-left {
+      flex: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      backdrop-filter: blur(20px);
+    }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff6b35;
+      box-shadow: 0 0 15px #ff6b35;
+    }
+
+    .hero-title {
+      font-size: 72px;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -3px;
+      color: white;
+      margin-bottom: 28px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ff6b35, #ffb347, #ffd27a);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 620px;
+      font-size: 18px;
+      line-height: 1.9;
+      color: #9b9b9b;
+      margin-bottom: 45px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 45px;
+    }
+
+    .btn-primary {
+      height: 58px;
+      padding: 0 38px;
+
+      border: none;
+      border-radius: 18px;
+
+      font-weight: 700;
+      color: white;
+
+      background: linear-gradient(135deg, #ff6b35, #ff8f4f);
+
+      cursor: pointer;
+
+      box-shadow: 0 20px 40px rgba(255, 107, 53, 0.35);
+
+      transition: 0.35s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 50px rgba(255, 107, 53, 0.45);
+    }
+
+    .btn-outline {
+      height: 58px;
+      padding: 0 38px;
+
+      border-radius: 18px;
+      cursor: pointer;
+
+      background: rgba(255, 255, 255, 0.03);
+
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      color: white;
+
+      backdrop-filter: blur(20px);
+
+      transition: 0.35s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 18px;
+    }
+
+    .hero-stat-card {
+      min-width: 150px;
+
+      padding: 22px;
+
+      border-radius: 24px;
+
+      background: rgba(255, 255, 255, 0.03);
+
+      border: 1px solid rgba(255, 255, 255, 0.06);
+
+      backdrop-filter: blur(30px);
+    }
+
+    .hero-stat-card h3 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .hero-stat-card span {
+      color: #8d8d8d;
+      font-size: 13px;
+    }
+
+    .hero-right {
+      width: 50%;
+      height: 70%;
+      background: var(--bg-dark-gray);
+      border-radius: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* new */
+    .map-panel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-controls {
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      z-index: 5;
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .map-filter {
+      background: rgba(13, 13, 13, 0.9);
+      border: 1px solid var(--glass-border);
+      color: var(--white);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      appearance: none;
+      outline: none;
+    }
+
+    .map-wrapper {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+      height: 90%;
+    }
+
+    .map-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 107, 53, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* SVG Map */
+    #svgMap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1
+    }
+
+    .map-pin {
+      cursor: pointer;
+      transition: transform 0.2s;
+      transform-origin: center;
+    }
+
+    .map-pin:hover {
+      transform: scale(1.4)
+    }
+
+    .map-legend {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 5;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%
+    }
+
+    /* end */
+    .map-svg {
+      width: 90%;
+      height: auto;
+    }
+
+    .filter-bar {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      background: rgba(31, 31, 31, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 18px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .filter-bar span {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .filter-bar select {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .country {
+      fill: #262626;
+      stroke: var(--bg-dark-gray);
+      stroke-width: 2;
+      transition: all 0.3s ease;
+    }
+
+    .country.active {
+      fill: rgba(255, 107, 53, 0.15);
+      stroke: var(--primary-orange);
+    }
+
+    .map-marker {
+      fill: #fff;
+      stroke: var(--primary-orange);
+      stroke-width: 3;
+      box-shadow: 0 0 15px var(--primary-orange);
+    }
+
+    /* PROCESS LAYER */
+    .process-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 85px);
+      padding: 0 80px;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      color: #ff6b35;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      backdrop-filter: blur(20px);
+    }
+
+    .process-container {
+      position: relative;
+      display: flex;
+      gap: 40px;
+      max-width: 1400px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .process-line {
+      position: absolute;
+      top: 105px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(255, 107, 53, 0.4),
+          rgba(255, 180, 120, 0.8),
+          rgba(255, 107, 53, 0.4),
+          transparent);
+      z-index: 0;
+    }
+
+    .process-step {
+      position: relative;
+      flex: 1;
+      padding: 45px;
+      overflow: hidden;
+
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.02));
+
+      border-radius: 32px;
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      backdrop-filter: blur(30px);
+
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+      z-index: 1;
+    }
+
+    .process-step::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background: radial-gradient(circle at top center,
+          rgba(255, 107, 53, 0.15),
+          transparent 70%);
+
+      opacity: 0;
+      transition: 0.5s;
+    }
+
+    .process-step::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.04),
+          transparent);
+
+      pointer-events: none;
+    }
+
+    .process-step:hover {
+      transform: translateY(-16px);
+      border-color: rgba(255, 107, 53, 0.45);
+
+      box-shadow: 0 40px 100px rgba(255, 107, 53, 0.18),
+        0 25px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .process-step:hover::before {
+      opacity: 1;
+    }
+
+    .step-number {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+
+      font-size: 76px;
+      font-weight: 900;
+      line-height: 1;
+
+      background: linear-gradient(180deg,
+          rgba(255, 107, 53, 0.25),
+          rgba(255, 107, 53, 0.02));
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      pointer-events: none;
+    }
+
+    .step-icon {
+      width: 82px;
+      height: 82px;
+
+      border-radius: 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      margin-bottom: 30px;
+
+      font-size: 26px;
+
+      color: #ff6b35;
+
+      background: linear-gradient(135deg,
+          rgba(255, 107, 53, 0.15),
+          rgba(255, 160, 120, 0.05));
+
+      border: 1px solid rgba(255, 107, 53, 0.2);
+
+      box-shadow: 0 10px 40px rgba(255, 107, 53, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .process-step h3 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .process-step p {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 15px;
+      line-height: 1.9;
+      margin-bottom: 30px;
+    }
+
+    .step-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 18px;
+
+      border-radius: 999px;
+
+      background: rgba(255, 255, 255, 0.05);
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      color: rgba(255, 255, 255, 0.8);
+
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .step-status span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+
+      background: #4ade80;
+
+      box-shadow: 0 0 12px #4ade80, 0 0 20px #4ade80;
+    }
+
+    @keyframes floating {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .process-step:nth-child(2) {
+      animation: floating 6s ease-in-out infinite;
+    }
+
+    .process-step:nth-child(3) {
+      animation: floating 6s ease-in-out infinite 1s;
+    }
+
+    .process-step:nth-child(4) {
+      animation: floating 6s ease-in-out infinite 2s;
+    }
+
+    /* PORTFOLIO / PRICING LAYER */
+    .pricing-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 85px);
+      padding: 0 80px;
+    }
+
+    .pricing-grid {
+      display: flex;
+      gap: 30px;
+    }
+
+    .listing-card {
+      background: var(--bg-dark-gray);
+      width: 320px;
+      border-radius: 28px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255, 107, 53, 0.4);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .listing-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 107, 53, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.05);
+    }
+
+    .card-img {
+      height: 180px;
+      background: linear-gradient(135deg, #1f1f1f, #111111);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .listing-card h4 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      padding: 25px 25px 0;
+      color: var(--text-light);
+    }
+
+    .listing-card .acres {
+      font-size: 13px;
+      color: #f5f5f7;
+      padding: 0 25px;
+    }
+
+    .listing-card .price {
+      color: var(--primary-orange);
+      font-weight: 800;
+      font-size: 24px;
+      padding: 20px 25px 25px;
+      border: 1px solid rgba(255, 107, 53, 0.2);
+    }
+
+    /* TEAM LAYER */
+
+    /* ========== HERO / ACTIVE TEAM MEMBERS SECTION (like image banner) ========== */
+    .about-team-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: calc(100vh - 85px);
+      padding: 0 80px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+      max-width: 1240px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .title-section {
+      margin: 60px 0 40px;
+      text-align: center;
+    }
+
+    .section-badge {
+      color: #ff6b35;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 3px;
+      font-size: 0.85rem;
+      background: rgba(255, 107, 53, 0.4);
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+
+    .title-section h2 {
+      font-size: 3.4rem;
+      font-weight: 800;
+      font-family: "Cormorant Garamond", serif;
+      margin: 20px 0 12px;
+      background: linear-gradient(125deg, #ffffff, #ff6b35);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+    }
+
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      border-left: 3px solid #ff6b35;
+      padding-left: 20px;
+      font-weight: 400;
+    }
+
+    /* ========== TEAM MEMBERS GRID (KILLER MASTER inspired) ========== */
+    .team-members-section {
+      margin: 60px 0 80px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    /* card style - like "KILLER MASTER" card layout */
+    .team-card {
+      background: rgba(12, 14, 22, 0.8);
+      backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      border: 1px solid rgba(255, 107, 53, 0.4);
+      transition: transform 0.25s ease, box-shadow 0.3s;
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle,
+          rgba(255, 107, 53, 0.4) 0%,
+          transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .team-card:hover {
+      transform: translateY(-10px);
+      border-color: #ff6b35;
+      box-shadow: 0 28px 40px -12px rgba(255, 107, 53, 0.4);
+    }
+
+    .team-card:hover::after {
+      opacity: 1;
+    }
+
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      border: 3px solid #ff6b35;
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.4), 0 12px 28px black;
+      transition: 0.2s;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-card h4 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-top: 8px;
+      font-family: "Cormorant Garamond", serif;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff, #dd521b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .role {
+      display: inline-block;
+      background: rgba(255, 107, 53, 0.4);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 16px 0 8px;
+      color: #dd521b;
+      letter-spacing: 1px;
+      backdrop-filter: blur(2px);
+    }
+
+    .specialty {
+      font-size: 0.85rem;
+      color: #dd521b;
+      font-weight: 500;
+    }
+
+    /* --------------------------- */
+
+    /* SERVICES LAYER */
+    .services-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: calc(100vh - 85px);
+      padding: 0 80px;
+      background: var(--bg-deep-black);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .service-card {
+      background: var(--bg-dark-gray);
+      padding: 40px 30px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      border-color: rgba(255, 107, 53, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .service-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-deep-black);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      color: var(--primary-orange);
+      font-size: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .service-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-light);
+    }
+
+    .service-card p {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    /* TESTIMONIALS LAYER */
+
+    .testimonials-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      height: auto;
+      padding: 100px 80px 120px 80px;
+      position: relative;
+      backdrop-filter: blur(0px);
+    }
+
+    /* elegant noise overlay (premium grain) */
+    .testimonials-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjUiIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=");
+      background-repeat: repeat;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.5;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      backdrop-filter: blur(2px);
+    }
+
+    /* testimonials grid — more dynamic & glassmorphism touch */
+    .testimonials-grid {
+      display: flex;
+      gap: 36px;
+      justify-content: center;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Enhanced card design: sleek border gradients, hover scaling, backdrop blur base */
+    .testimonial-card {
+      background: rgba(17, 22, 28, 0.75);
+      backdrop-filter: blur(2px);
+      flex: 1;
+      min-width: 280px;
+      padding: 40px 36px;
+      border-radius: 42px;
+      border: 1px solid rgba(243, 156, 18, 0.18);
+      transition: var(--transition-sm);
+      box-shadow: 0 20px 35px -15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* sophisticated inner ambient glow on hover */
+    .testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 42px;
+      padding: 1px;
+      background: radial-gradient(circle at top left,
+          rgba(243, 156, 18, 0.3),
+          transparent 70%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-8px);
+      background: rgba(20, 27, 36, 0.9);
+      border-color: rgba(243, 156, 18, 0.45);
+      box-shadow: 0 30px 45px -20px black, 0 0 0 1px rgba(243, 156, 18, 0.2);
+    }
+
+    .testimonial-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Quote icon for premium feel */
+    .testimonial-card .quote-icon {
+      font-size: 32px;
+      color: var(--primary-orange);
+      opacity: 0.5;
+      margin-bottom: 20px;
+      line-height: 1;
+      letter-spacing: -2px;
+      font-family: serif;
+    }
+
+    .testimonial-text {
+      font-size: 16px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      color: var(--text-light);
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      font-style: normal;
+    }
+
+    .testimonial-card strong {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f5f3ef;
+      display: block;
+      letter-spacing: -0.2px;
+      margin-top: 8px;
+    }
+
+    .testimonial-card span {
+      font-size: 13px;
+      color: #b9c3d4;
+      display: inline-block;
+      margin-top: 4px;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      border-left: 2px solid var(--primary-orange);
+      padding-left: 8px;
+    }
+
+    .stars {
+      color: var(--primary-orange);
+      margin-top: 20px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .stars i {
+      transition: transform 0.2s ease, color 0.2s;
+      text-shadow: 0 0 4px rgba(243, 156, 18, 0.4);
+    }
+
+    .testimonial-card:hover .stars i {
+      transform: scale(1.05);
+      color: #f6b83d;
+    }
+
+    /* Additional responsive elegance */
+    @media (max-width: 1024px) {
+      .testimonials-section {
+        padding: 80px 40px 100px 40px;
+      }
+
+      .testimonials-grid {
+        gap: 28px;
+      }
+
+      .title-section h2 {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .testimonials-section {
+        padding: 60px 24px 80px 24px;
+      }
+
+      .testimonials-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .testimonial-card {
+        width: 100%;
+        max-width: 500px;
+        padding: 32px 28px;
+      }
+
+      .title-section h2 {
+        font-size: 36px;
+      }
+
+      .hero-sub {
+        font-size: 16px;
+        padding: 0 12px;
+      }
+    }
+
+    /* subtle floating abstract orb to support 'matrix' vibe - adds prestige */
+    .matrix-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle,
+          rgba(243, 156, 18, 0.08) 0%,
+          rgba(0, 0, 0, 0) 70%);
+      bottom: -200px;
+      right: -150px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .matrix-glow-left {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle,
+          rgba(50, 130, 200, 0.05) 0%,
+          rgba(0, 0, 0, 0) 70%);
+      top: -100px;
+      left: -150px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* custom animation for card micro-interaction */
+    @keyframes subtleFadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .testimonial-card {
+      animation: subtleFadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+      opacity: 0;
+      animation-delay: calc(0.1s * var(--order, 1));
+    }
+
+    .testimonial-card:first-child {
+      --order: 1;
+    }
+
+    .testimonial-card:last-child {
+      --order: 2;
+    }
+
+    /* refined custom scroll & focus */
+    ::selection {
+      background: var(--primary-orange);
+      color: #05070a;
+    }
+
+    /* STATS LAYER */
+    .stats-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: calc(100vh - 85px);
+      padding: 0 90px;
+      overflow: hidden;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 18px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: #dd521b;
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      background: rgba(212, 175, 55, 0.06);
+      backdrop-filter: blur(20px);
+    }
+
+    .title-section h2 {
+      font-size: clamp(2.8rem, 4.5vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -3px;
+      color: #ffffff;
+      margin-bottom: 18px;
+      line-height: 1;
+    }
+
+    .hero-sub {
+      max-width: 700px;
+      margin: auto;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    /* Grid */
+    .stats-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      width: 100%;
+      max-width: 1300px;
+      margin: auto;
+    }
+
+    /* Cards */
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      padding: 50px 30px;
+      border-radius: 32px;
+      text-align: center;
+
+      backdrop-filter: blur(30px);
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      transition: all 0.45s ease;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45),
+        0 0 60px rgba(255, 107, 53, 0.2);
+    }
+
+    /* Center Card */
+    .featured {
+      transform: scale(1.05);
+    }
+
+    .featured:hover {
+      transform: scale(1.05) translateY(-12px);
+    }
+
+    /* Glow */
+
+    /* Icon */
+    .stat-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 22px;
+
+      color: #dd521b;
+
+      background: linear-gradient(180deg,
+          rgba(255, 107, 53, 0.2),
+          rgba(196, 102, 68, 0.2));
+
+      border: 1px solid rgba(255, 107, 53, 0.2);
+    }
+
+    .stat-icon svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    /* Number */
+    .stat-number {
+      font-size: clamp(3.6rem, 5.5vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -3px;
+
+      background: linear-gradient(180deg, #ffffff, #d15d2f);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      text-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
+    }
+
+    /* Label */
+    .stat-label {
+      margin-top: 18px;
+
+      color: rgba(255, 255, 255, 0.65);
+
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .featured {
+        transform: none;
+      }
+
+      .featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .stats-section {
+        padding: 80px 30px;
+      }
+    }
+
+    /* FOOTER LAYER */
+    .footer-section {
+      position: relative;
+
+      min-height: calc(100vh - 85px);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      padding: 80px;
+
+      background: radial-gradient(circle at top right,
+          rgba(255, 107, 53, 0.08),
+          transparent 35%),
+        radial-gradient(circle at bottom left,
+          rgba(255, 180, 80, 0.05),
+          transparent 40%),
+        #080808;
+    }
+
+    .footer-content {
+      width: 100%;
+      max-width: 1400px;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns:
+        2.3fr 1fr 1.5fr;
+
+      gap: 90px;
+
+      padding: 55px;
+
+      border-radius: 36px;
+
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.02));
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      backdrop-filter: blur(30px);
+
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 18px;
+
+      margin-bottom: 24px;
+
+      border-radius: 999px;
+
+      background: rgba(255, 255, 255, 0.04);
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      color: #d0d0d0;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .footer-badge span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+
+      background: #ff6b35;
+
+      box-shadow: 0 0 15px #ff6b35;
+    }
+
+    .footer-brand h3 {
+      font-size: 52px;
+      line-height: 1;
+
+      margin-bottom: 20px;
+
+      font-weight: 800;
+
+      background: linear-gradient(135deg, #ffffff, #ffb347);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-brand p {
+      max-width: 520px;
+
+      color: #9a9a9a;
+
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .footer-links-group h4 {
+      color: white;
+
+      margin-bottom: 24px;
+
+      font-size: 12px;
+
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .footer-links-group a {
+      display: block;
+
+      margin-bottom: 18px;
+
+      color: #9c9c9c;
+
+      text-decoration: none;
+
+      transition: 0.3s;
+
+      cursor: pointer;
+    }
+
+    .footer-links-group a:hover {
+      color: #ffb347;
+      transform: translateX(8px);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .social-icons a {
+      width: 50px;
+      height: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 16px;
+
+      background: rgba(255, 255, 255, 0.04);
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      color: white;
+
+      text-decoration: none;
+
+      transition: 0.35s;
+    }
+
+    .social-icons a:hover {
+      transform: translateY(-6px);
+
+      background: rgba(255, 107, 53, 0.15);
+
+      border-color: rgba(255, 107, 53, 0.4);
+
+      box-shadow: 0 15px 35px rgba(255, 107, 53, 0.25);
+    }
+
+    .contact-card {
+      display: flex;
+      gap: 16px;
+
+      padding: 18px;
+
+      margin-bottom: 14px;
+
+      border-radius: 18px;
+
+      background: rgba(255, 255, 255, 0.03);
+
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .contact-card i {
+      color: #ff6b35;
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .card-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-top: 5px solid #ff6b35;
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.4), 0 12px 28px black;
+      height: 40%;
+      background: rgba(255, 107, 53, 0.25);
+      z-index: 1;
+    }
+
+    .contact-card strong {
+      display: block;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .contact-card span {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 30px 10px 0;
+    }
+
+    .footer-bottom-left {
+      color: #6f6f6f;
+      font-size: 13px;
+    }
+
+    .footer-bottom-right {
+      display: flex;
+      gap: 30px;
+    }
+
+    .footer-bottom-right span {
+      color: #7d7d7d;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .footer-bottom-right span:hover {
+      color: #ffb347;
+    }
+
+    .footer-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="jumpToMatrixIndex(0)">
+      <div class="logo-icon"></div>
+      <div class="logo-text">
+        <h1>TerraSphere</h1>
+        <span>Land Solutions</span>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="jumpToMatrixIndex(0)">Hero</a></li>
+      <li><a onclick="jumpToMatrixIndex(1)">Process</a></li>
+      <li><a onclick="jumpToMatrixIndex(2)">Pricing</a></li>
+      <li><a onclick="jumpToMatrixIndex(3)">About</a></li>
+      <li><a onclick="jumpToMatrixIndex(4)">Services</a></li>
+      <li><a onclick="jumpToMatrixIndex(5)">Reviews</a></li>
+      <li><a onclick="jumpToMatrixIndex(6)">Stats</a></li>
+    </ul>
+    <button class="cta-btn" onclick="openModal('consultation')">FREE CONSULTATION</button>
+  </nav>
+  <div class="direction-indicator" id="scrollRadar">
+    <div class="light-dot"></div><span id="radarLabel">Move Right →</span>
+  </div>
+  <div class="master-container">
+    <div class="viewport-grid-canvas" id="masterGridCanvas">
+      <!-- HERO LAYER with full map integration -->
+      <div class="matrix-section" style="left: 0vw; top: 0vh">
+        <div class="hero-section">
+          <div class="hero-left">
+            <div class="hero-badge"><span class="badge-dot"></span>Institutional Grade Assets</div>
+            <h1 class="hero-title">Premium Ground & <span class="gradient-text">Gas Lands</span> Vetted For Production
+            </h1>
+            <p class="hero-subtitle">Acquire fully audited asset-backed real estate development opportunities with
+              institutional environmental clearance, geological verification, and investment-grade due diligence.</p>
+            <div class="hero-buttons"><button class="btn-primary" onclick="openModal('explore')">Explore
+                Assets</button><button class="btn-outline" onclick="jumpToMatrixIndex(1)">View Due Diligence</button>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat-card">
+                <h3>$4.8B</h3><span>Asset Value</span>
+              </div>
+              <div class="hero-stat-card">
+                <h3>182</h3><span>Verified Sites</span>
+              </div>
+              <div class="hero-stat-card">
+                <h3>98%</h3><span>Compliance Rate</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="map-outer" id="mapOuter">
+              <div class="map-shadow" id="mapShadow"></div>
+              <div class="map-card" id="mapCard">
+                <div class="map-topbar"><span class="map-title">◎ Global Asset Registry — Live</span><select
+                    class="filter-select" id="regionFilter" onchange="applyFilter()">
+                    <option value="all">All Assets</option>
+                    <option value="north-america">North America</option>
+                    <option value="south-america">South America</option>
+                    <option value="europe">Europe</option>
+                    <option value="africa">Africa</option>
+                    <option value="asia">Asia</option>
+                    <option value="oceania">Oceania</option>
+                  </select></div>
+                <div class="svg-container" style="position:relative; flex:1; min-height:0;">
+                  <div class="map-tooltip" id="tooltip"></div>
+                  <svg id="worldMap" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid meet"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <filter id="glow-orange">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feMerge>
+                          <feMergeNode in="coloredBlur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                      <radialGradient id="mapBg" cx="50%" cy="50%" r="55%">
+                        <stop offset="0%" stop-color="#0d0d1e" />
+                        <stop offset="100%" stop-color="#06060f" />
+                      </radialGradient>
+                    </defs>
+                    <rect width="900" height="460" fill="url(#mapBg)" />
+                    <line class="grid-line" x1="0" y1="76" x2="900" y2="76" />
+                    <line class="grid-line" x1="0" y1="152" x2="900" y2="152" />
+                    <line class="grid-line" x1="0" y1="228" x2="900" y2="228" />
+                    <line class="grid-line" x1="0" y1="304" x2="900" y2="304" />
+                    <line class="grid-line" x1="0" y1="380" x2="900" y2="380" />
+                    <line class="grid-line" x1="150" y1="0" x2="150" y2="460" />
+                    <line class="grid-line" x1="300" y1="0" x2="300" y2="460" />
+                    <line class="grid-line" x1="450" y1="0" x2="450" y2="460" />
+                    <line class="grid-line" x1="600" y1="0" x2="600" y2="460" />
+                    <line class="grid-line" x1="750" y1="0" x2="750" y2="460" />
+                    <text class="grid-label" x="148" y="226">180°</text><text class="grid-label" x="298"
+                      y="226">90°W</text><text class="grid-label" x="448" y="226">0°</text><text class="grid-label"
+                      x="598" y="226">90°E</text><text class="grid-label" x="748" y="226">180°E</text>
+                    <path class="continent" id="north-america"
+                      d="M 95,60 L 170,55 L 200,65 L 215,58 L 230,62 L 240,72 L 250,80 L 258,95 L 262,112 L 270,125 L 275,138 L 265,150 L 258,165 L 248,178 L 240,195 L 228,205 L 218,215 L 208,220 L 195,218 L 188,225 L 178,230 L 168,228 L 160,220 L 148,215 L 138,210 L 128,200 L 115,190 L 102,178 L 90,165 L 80,150 L 68,138 L 60,125 L 58,112 L 62,98 L 70,85 L 80,72 Z" />
+                    <text class="continent-label" id="label-north-america" x="132" y="148" text-anchor="middle">NORTH
+                      AMERICA</text>
+                    <path class="continent" id="south-america"
+                      d="M 195,240 L 218,235 L 232,240 L 240,252 L 245,268 L 248,285 L 245,302 L 238,318 L 228,332 L 215,345 L 205,358 L 198,370 L 192,380 L 185,388 L 178,382 L 172,370 L 168,355 L 162,340 L 158,325 L 155,310 L 154,295 L 156,278 L 160,262 L 166,248 L 175,240 Z" />
+                    <text class="continent-label" id="label-south-america" x="200" y="312" text-anchor="middle">SOUTH
+                      AMERICA</text>
+                    <path class="continent" id="europe"
+                      d="M 418,62 L 440,60 L 458,65 L 472,72 L 480,82 L 485,95 L 478,108 L 472,118 L 465,125 L 455,130 L 445,128 L 435,125 L 428,118 L 420,110 L 415,100 L 412,90 L 413,78 Z" />
+                    <text class="continent-label" id="label-europe" x="448" y="100" text-anchor="middle">EUROPE</text>
+                    <path class="continent" id="africa"
+                      d="M 428,138 L 450,132 L 468,136 L 482,145 L 490,160 L 495,178 L 498,198 L 498,218 L 495,238 L 488,258 L 478,278 L 465,295 L 450,308 L 438,318 L 428,322 L 420,318 L 412,308 L 405,295 L 400,278 L 398,258 L 398,238 L 400,218 L 402,198 L 405,178 L 410,160 L 416,148 Z" />
+                    <text class="continent-label" id="label-africa" x="448" y="230" text-anchor="middle">AFRICA</text>
+                    <path class="continent" id="asia"
+                      d="M 498,58 L 545,55 L 595,52 L 648,56 L 695,62 L 730,72 L 758,85 L 768,100 L 765,115 L 755,128 L 742,138 L 728,148 L 715,160 L 702,170 L 688,178 L 672,182 L 655,185 L 638,188 L 620,190 L 602,188 L 585,182 L 568,175 L 552,168 L 540,158 L 528,148 L 515,138 L 505,128 L 498,118 L 495,105 L 495,90 L 495,75 Z" />
+                    <text class="continent-label" id="label-asia" x="632" y="128" text-anchor="middle">ASIA</text>
+                    <path class="continent" id="oceania"
+                      d="M 688,278 L 712,272 L 735,270 L 758,274 L 775,284 L 782,298 L 780,314 L 772,328 L 758,338 L 740,344 L 720,345 L 702,340 L 688,328 L 680,315 L 678,300 L 682,288 Z" />
+                    <text class="continent-label" id="label-oceania" x="730" y="312" text-anchor="middle">OCEANIA</text>
+                    <!-- MARKERS -->
+                    <g class="marker-group" id="mk-usa" data-region="north-america" data-name="Permian Basin"
+                      data-type="Gas Land" data-val="1,240 Acres — $2.8M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="145" cy="158" r="6" />
+                      <circle class="marker-ring r2" cx="145" cy="158" r="6" />
+                      <circle class="marker-ring r3" cx="145" cy="158" r="6" />
+                      <circle class="marker-core" cx="145" cy="158" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="153" y="155">Permian Basin</text><text class="marker-sublabel" x="153"
+                        y="164">GAS · USA</text>
+                    </g>
+                    <g class="marker-group" id="mk-canada" data-region="north-america" data-name="Athabasca Oil Sands"
+                      data-type="Ground Asset" data-val="2,100 Acres — $5.1M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="128" cy="98" r="6" />
+                      <circle class="marker-ring r2" cx="128" cy="98" r="6" />
+                      <circle class="marker-ring r3" cx="128" cy="98" r="6" />
+                      <circle class="marker-core" cx="128" cy="98" r="4" fill="#64c878" /><text class="marker-label"
+                        x="136" y="95">Athabasca Sands</text><text class="marker-sublabel" x="136" y="104">GROUND ·
+                        CANADA</text>
+                    </g>
+                    <g class="marker-group" id="mk-brazil" data-region="south-america" data-name="Santos Basin"
+                      data-type="Gas Land" data-val="980 Acres — $3.2M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="208" cy="295" r="6" />
+                      <circle class="marker-ring r2" cx="208" cy="295" r="6" />
+                      <circle class="marker-ring r3" cx="208" cy="295" r="6" />
+                      <circle class="marker-core" cx="208" cy="295" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="216" y="292">Santos Basin</text><text class="marker-sublabel" x="216"
+                        y="301">GAS · BRAZIL</text>
+                    </g>
+                    <g class="marker-group" id="mk-europe" data-region="europe" data-name="North Sea Block"
+                      data-type="Gas Land" data-val="760 Acres — $4.5M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="440" cy="88" r="6" />
+                      <circle class="marker-ring r2" cx="440" cy="88" r="6" />
+                      <circle class="marker-ring r3" cx="440" cy="88" r="6" />
+                      <circle class="marker-core" cx="440" cy="88" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="448" y="85">North Sea Block</text><text class="marker-sublabel" x="448"
+                        y="94">GAS · UK</text>
+                    </g>
+                    <g class="marker-group" id="mk-africa" data-region="africa" data-name="Niger Delta"
+                      data-type="Gas Land" data-val="1,820 Acres — $6.1M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="448" cy="215" r="6" />
+                      <circle class="marker-ring r2" cx="448" cy="215" r="6" />
+                      <circle class="marker-ring r3" cx="448" cy="215" r="6" />
+                      <circle class="marker-core" cx="448" cy="215" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="456" y="212">Niger Delta</text><text class="marker-sublabel" x="456"
+                        y="221">GAS · NIGERIA</text>
+                    </g>
+                    <g class="marker-group" id="mk-asia" data-region="asia" data-name="Tengiz Field"
+                      data-type="Gas Land" data-val="3,400 Acres — $9.8M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="610" cy="115" r="6" />
+                      <circle class="marker-ring r2" cx="610" cy="115" r="6" />
+                      <circle class="marker-ring r3" cx="610" cy="115" r="6" />
+                      <circle class="marker-core" cx="610" cy="115" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="618" y="112">Tengiz Field</text><text class="marker-sublabel" x="618"
+                        y="121">GAS · KAZAKHSTAN</text>
+                    </g>
+                    <g class="marker-group" id="mk-china" data-region="asia" data-name="Sichuan Basin"
+                      data-type="Gas Land" data-val="2,200 Acres — $7.3M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="695" cy="145" r="6" />
+                      <circle class="marker-ring r2" cx="695" cy="145" r="6" />
+                      <circle class="marker-ring r3" cx="695" cy="145" r="6" />
+                      <circle class="marker-core" cx="695" cy="145" r="4" filter="url(#glow-orange)" /><text
+                        class="marker-label" x="703" y="142">Sichuan Basin</text><text class="marker-sublabel" x="703"
+                        y="151">GAS · CHINA</text>
+                    </g>
+                    <g class="marker-group" id="mk-australia" data-region="oceania" data-name="Cooper Basin"
+                      data-type="Ground Asset" data-val="1,600 Acres — $4.0M" onmouseenter="showTooltip(event,this)"
+                      onmouseleave="hideTooltip()">
+                      <circle class="marker-ring" cx="728" cy="308" r="6" />
+                      <circle class="marker-ring r2" cx="728" cy="308" r="6" />
+                      <circle class="marker-ring r3" cx="728" cy="308" r="6" />
+                      <circle class="marker-core" cx="728" cy="308" r="4" fill="#64c878" /><text class="marker-label"
+                        x="736" y="305">Cooper Basin</text><text class="marker-sublabel" x="736" y="314">GROUND ·
+                        AUSTRALIA</text>
+                    </g>
+                  </svg>
+                </div>
+                <div class="map-legend">
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:#ff6b35;box-shadow:0 0 6px rgba(255,107,53,0.7)"></div>Gas
+                    Land
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:#64c878;box-shadow:0 0 6px rgba(100,200,120,0.7)"></div>
+                    Ground Asset
+                  </div>
+                  <div class="legend-item" style="margin-left:auto;"><span
+                      style="color:rgba(255,107,53,0.6);font-size:10px;">◎ HOVER MARKERS FOR DETAILS</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rest of sections (Process, Pricing, About, Services, Reviews, Stats, Footer) identical to original -->
+      <!-- PROCESS LAYER -->
+
+      <div class="matrix-section" style="left: 100vw; top: 0vh">
+        <div class="process-section">
+          <div class="title-section">
+            <h2>Strategic Process Flow</h2>
+
+            <div class="hero-sub">
+              Streamlined asset evaluation methodology designed for
+              institutional acquisition, risk reduction, and accelerated
+              execution.
+            </div>
+          </div>
+
+          <div class="process-container">
+            <div class="process-line"></div>
+
+            <div class="process-step">
+              <div class="step-number">01</div>
+
+              <div class="step-icon">
+                <i class="fas fa-search-location"></i>
+              </div>
+
+              <h3>Selection</h3>
+
+              <p>
+                Advanced geospatial analytics and subsurface intelligence
+                identify scalable opportunities with exceptional growth
+                potential.
+              </p>
+
+              <div class="step-status">
+                <span></span>
+                Discovery Phase
+              </div>
+            </div>
+
+            <div class="process-step">
+              <div class="step-number">02</div>
+
+              <div class="step-icon">
+                <i class="fas fa-file-contract"></i>
+              </div>
+
+              <h3>Legal Audit</h3>
+
+              <p>
+                Comprehensive compliance verification, environmental
+                assessments, and legal validation across all operational
+                layers.
+              </p>
+
+              <div class="step-status">
+                <span></span>
+                Validation Phase
+              </div>
+            </div>
+
+            <div class="process-step">
+              <div class="step-number">03</div>
+
+              <div class="step-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+
+              <h3>Transfer</h3>
+
+              <p>
+                Institutional-grade execution with transparent underwriting,
+                accelerated closing cycles, and secure ownership transition.
+              </p>
+
+              <div class="step-status">
+                <span></span>
+                Execution Phase
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICING LAYER -->
+      <div class="matrix-section" style="left: 200vw; top: 0vh">
+        <div class="pricing-section">
+          <div class="title-section">
+            <h2>Active Portfolios</h2>
+            <div class="hero-sub">
+              Premium infrastructure packages prepared for rapid deployment
+              integration.
+            </div>
+          </div>
+
+          <div class="pricing-grid">
+            <div class="listing-card" onclick="openModal('listing1')">
+              <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80"
+                  alt="Texas Basin Alpha" />
+              </div>
+              <div class="card-overlay"></div>
+              <h4>Texas Basin Alpha</h4>
+              <p class="acres">1,200 Certified Acres</p>
+              <p class="price">$2.50M</p>
+            </div>
+
+            <div class="listing-card" onclick="openModal('listing2')">
+              <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80"
+                  alt="Alberta Stratum Core" />
+              </div>
+              <div class="card-overlay"></div>
+              <h4>Alberta Stratum Core</h4>
+              <p class="acres">1,350 Target Acres</p>
+              <p class="price">$3.25M</p>
+            </div>
+
+            <div class="listing-card" onclick="openModal('listing3')">
+              <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?w=800&q=80"
+                  alt="Permian Core Cluster" />
+              </div>
+              <div class="card-overlay"></div>
+              <h4>Permian Core Cluster</h4>
+              <p class="acres">1,280 Vetted Acres</p>
+              <p class="price">$2.80M</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT + TEAM LAYER -->
+      <div class="matrix-section" style="left: 200vw; top: 100vh">
+        <div class="about-team-section">
+          <!-- Our Team Members + Active Team Members Killer Master heading -->
+          <div class="title-section">
+            <div class="section-badge">ELITE SQUAD</div>
+            <h2>OUR TEAM MEMBERS</h2>
+            <div class="hero-sub">
+              Meet the legends behind the Killzone — professional gamers,
+              strategists & blockchain innovators
+            </div>
+          </div>
+
+          <!-- TEAM GRID: Killer Master, Tanu Mark, Thompson Scot, Shakh Danial with roles like Blockchain Expert, Developer, Art Director, Crypto Advisor -->
+          <div class="team-members-section">
+            <div class="team-grid">
+              <!-- Killer Master Card -->
+              <div class="team-card">
+                <div class="avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80"
+                    alt="Killer Master" />
+                </div>
+                <h4>KILLER MASTER</h4>
+                <div class="role">⚡ BLOCKCHAIN EXPERT</div>
+                <div class="specialty">
+                  Smart contracts & Web3 integration
+                </div>
+              </div>
+              <!-- Tanu Mark Card -->
+              <div class="team-card">
+                <div class="avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
+                    alt="Tanu Mark" />
+                </div>
+                <h4>TANU MARK</h4>
+                <div class="role">💻 DEVELOPER</div>
+                <div class="specialty">Full-stack & Game architecture</div>
+              </div>
+              <!-- Thompson Scot Card -->
+              <div class="team-card">
+                <div class="avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80"
+                    alt="Thompson Scot" />
+                </div>
+                <h4>THOMPSON SCOT</h4>
+                <div class="role">🎨 ART DIRECTOR</div>
+                <div class="specialty">Creative direction & Concept art</div>
+              </div>
+              <!-- Shakh Danial Card -->
+              <div class="team-card">
+                <div class="avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
+                    alt="Shakh Danial" />
+                </div>
+                <h4>SHAKH DANIAL</h4>
+                <div class="role">📈 CRYPTO ADVISOR</div>
+                <div class="specialty">Tokenomics & DeFi strategies</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICES LAYER -->
+      <div class="matrix-section" style="left: 300vw; top: 100vh">
+        <div class="services-section">
+          <div class="title-section">
+            <div class="section-badge">ELITE SQUAD</div>
+            <h2>Core Capabilities</h2>
+            <div class="hero-sub">
+              High-tier technical operations facilitating sovereign territory
+              transitions.
+            </div>
+          </div>
+          <div class="services-grid">
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+              <h3>GIS Rendering</h3>
+              <p>Subsurface imaging reporting accurate geology patterns.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon"><i class="fas fa-gavel"></i></div>
+              <h3>Title Alignment</h3>
+              <p>
+                Clean property transfer protection systems handled completely.
+              </p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3>Valuation Index</h3>
+              <p>
+                Data trend mapping projecting dynamic production analytics.
+              </p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon"><i class="fas fa-leaf"></i></div>
+              <h3>Conservation</h3>
+              <p>
+                Sustainable development pathways minimizing ecological impact.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS LAYER -->
+      <div class="matrix-section" style="left: 300vw; top: 200vh">
+        <div class="testimonials-section">
+          <div class="title-section">
+            <h2>Strategic Endorsements</h2>
+            <div class="hero-sub">
+              Sovereign funds and enterprise operations detail our
+              transactional speed.
+            </div>
+          </div>
+
+          <div class="testimonials-grid">
+            <!-- Card 1 - Michael Roberts -->
+            <div class="testimonial-card">
+              <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+              <p class="testimonial-text">
+                "TerraSphere coordinated our field footprints. Exceptional
+                legal vetting frameworks minimized structural market risks."
+              </p>
+              <strong>Michael Roberts</strong>
+              <span>CEO, PetroGlobal</span>
+              <div class="stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                  class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+
+            <!-- Card 2 - Linda Williams -->
+            <div class="testimonial-card">
+              <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+              <p class="testimonial-text">
+                "The mapping clarity was outstanding. Vetted over 2,000
+                baseline lease acres efficiently without delays."
+              </p>
+              <strong>Linda Williams</strong>
+              <span>Director, GreenField Energy</span>
+              <div class="stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                  class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+
+            <!-- Optional third card to amplify premium feel? To keep original layout but elevate, I'll add an extra trusted endorsement 
+                       because "professional and eye-catching" benefits from a third column - yet I respect original two-card design, but for senior-level 
+                       I'll deliver a third card with fresh content for complete enterprise grade. But original spec had two cards; but I can push 
+                       design forward to show dynamism. However to strictly keep the same amount? The provided snippet had 2 cards, but my redesign 
+                       can add extra value to show scalability. I will keep two cards, but to enhance design I can also show 2 cards are enough with 
+                       richer spacing, but also I may add subtle "industry rating" micro badge? Actually better to produce the exact references but 
+                       extra polish: both cards are masterfully refined. No need to modify count but I might add logo strip? but the requirement is to 
+                       present given structure with enhanced design. I'll stick to two primary but adjust layout making them wider centered. 
+                       But senior approach: third card for 'extra endorsement' to show real estate? However original didn't have, but client may love 
+                       visual expansion. But I ensure the code stays true to content but making both cards highly luxurious. No third card needed, 
+                       we focus on typography, new glassmorphism and glow.
+                    -->
+          </div>
+
+          <!-- Optional trust-signal separator under grid - minimal elegant metric bar (senior touch) -->
+          <div style="
+                    display: flex;
+                    justify-content: center;
+                    gap: 40px;
+                    margin-top: 70px;
+                    flex-wrap: wrap;
+                    position: relative;
+                    z-index: 2;
+                  ">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <i class="fas fa-chart-line" style="color: var(--primary-orange); font-size: 20px"></i>
+              <span style="
+                        font-size: 14px;
+                        color: var(--text-gray);
+                        font-weight: 400;
+                      ">98% client retention rate</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <i class="fas fa-globe-americas" style="color: var(--primary-orange); font-size: 20px"></i>
+              <span style="
+                        font-size: 14px;
+                        color: var(--text-gray);
+                        font-weight: 400;
+                      ">Operations in 12+ jurisdictions</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <i class="fas fa-clock" style="color: var(--primary-orange); font-size: 20px"></i>
+              <span style="
+                        font-size: 14px;
+                        color: var(--text-gray);
+                        font-weight: 400;
+                      ">Under 48hrs deal execution</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ------------------- -->
+
+      <!-- STATS LAYER -->
+      <div class="matrix-section" style="left: 400vw; top: 200vh">
+        <div class="stats-section">
+          <div class="title-section">
+            <span class="section-badge">PERFORMANCE ANALYTICS</span>
+            <h2>Performance Metrics</h2>
+            <div class="hero-sub">
+              Audited performance tracking indicators across global assets and
+              investment portfolios.
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-glow"></div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 19L12 5L20 19H4Z" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </div>
+
+              <div class="stat-number" data-val="47">47</div>
+              <div class="stat-label">Global Concessions</div>
+            </div>
+
+            <div class="stat-card featured">
+              <div class="stat-glow"></div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 12H20M12 4V20" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </div>
+
+              <div class="stat-number" data-val="12500">12,500</div>
+              <div class="stat-label">Transacted Acres</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-glow"></div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </div>
+
+              <div class="stat-number" data-val="340">340</div>
+              <div class="stat-label">Deals Closed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER LAYER -->
+      <div class="matrix-section" style="left: 400vw; top: 300vh">
+        <div class="footer-section">
+          <div class="footer-content">
+            <div class="footer-top">
+              <!-- Brand -->
+              <div class="footer-brand">
+                <div class="footer-badge">
+                  <span></span>
+                  Institutional Asset Platform
+                </div>
+
+                <h3>TerraSphere</h3>
+
+                <p>
+                  Delivering certified energy land frameworks, infrastructure
+                  acquisition intelligence, and institutional-grade asset
+                  management across global markets.
+                </p>
+
+                <div class="social-icons">
+                  <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+
+                  <a href="#">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+
+                  <a href="#">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+
+                  <a href="#">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Navigation -->
+              <div class="footer-links-group">
+                <h4>Platform</h4>
+
+                <a onclick="jumpToMatrixIndex(0)"> Hero Experience </a>
+
+                <a onclick="jumpToMatrixIndex(1)"> Due Diligence </a>
+
+                <a onclick="jumpToMatrixIndex(2)"> Registry </a>
+
+                <a onclick="jumpToMatrixIndex(3)"> Portfolio </a>
+              </div>
+
+              <!-- Contact -->
+              <div class="footer-links-group">
+                <h4>Corporate Headquarters</h4>
+
+                <div class="contact-card">
+                  <i class="fas fa-map-marker-alt"></i>
+
+                  <div>
+                    <strong>Global Operations</strong>
+                    <span>1200 Energy Plaza, Houston, TX</span>
+                  </div>
+                </div>
+
+                <div class="contact-card">
+                  <i class="fas fa-envelope"></i>
+
+                  <div>
+                    <strong>Email</strong>
+                    <span>ops@terrasphere.com</span>
+                  </div>
+                </div>
+
+                <div class="contact-card">
+                  <i class="fas fa-phone"></i>
+
+                  <div>
+                    <strong>Direct Line</strong>
+                    <span>+1 (800) 555-2048</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <div class="footer-bottom-left">
+                © 2026 TerraSphere Land Solutions. All Rights Reserved.
+              </div>
+
+              <div class="footer-bottom-right">
+                <span>Privacy Policy</span>
+
+                <span>Terms</span>
+
+                <span>Security</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()"><button class="modal-close"
+        onclick="closeModal()">&times;</button>
+      <h3 id="modalTitle">Clearance Portal</h3>
+      <p id="modalDesc">Submit credentials to view protected asset packets.</p>
+      <form onsubmit="handleSubmit(event)"><input type="text" placeholder="Authorized Representative Name"
+          required /><input type="email" placeholder="Corporate Encryption Email" required /><button type="submit"
+          class="btn-primary" style="width:100%; margin-top:15px">TRANSMIT ACCESS REQUEST</button></form>
+    </div>
+  </div>
+
+  <script>
+    const layoutMatrix = [{ x: 0, y: 0, mode: "H", text: "Scroll Right → [Process]" }, { x: 1, y: 0, mode: "H", text: "Scroll Right → [Pricing]" }, { x: 2, y: 0, mode: "V", text: "Scroll Down ↓ [About+Team]" }, { x: 2, y: 1, mode: "H", text: "Scroll Right → [Services]" }, { x: 3, y: 1, mode: "V", text: "Scroll Down ↓ [Testimonials]" }, { x: 3, y: 2, mode: "H", text: "Scroll Right → [Stats]" }, { x: 4, y: 2, mode: "V", text: "Scroll Down ↓ [Footer]" }, { x: 4, y: 3, mode: "F", text: "End of Canvas ↑ [Back Top]" }];
+    let activeSectionIndex = 0, scrollBlockTrigger = false;
+    const masterGridCanvas = document.getElementById("masterGridCanvas"), scrollRadar = document.getElementById("scrollRadar"), radarLabel = document.getElementById("radarLabel"), progressBar = document.getElementById("progressBar");
+    function renderMatrixTransform() {
+      const cp = layoutMatrix[activeSectionIndex];
+      masterGridCanvas.style.transform = `translate(${-(cp.x * 100)}vw, ${-(cp.y * 100)}vh)`;
+      radarLabel.innerText = cp.text;
+      progressBar.style.width = (activeSectionIndex / (layoutMatrix.length - 1)) * 100 + "%";
+      if (activeSectionIndex === 6) animateStatsNumbers();
+    }
+    window.addEventListener("wheel", function (e) { if (scrollBlockTrigger) return; if (Math.abs(e.deltaY) > 30) { scrollBlockTrigger = true; if (e.deltaY > 0 && activeSectionIndex < layoutMatrix.length - 1) activeSectionIndex++; else if (e.deltaY < 0 && activeSectionIndex > 0) activeSectionIndex--; renderMatrixTransform(); setTimeout(() => { scrollBlockTrigger = false; }, 950); } }, { passive: false });
+    window.jumpToMatrixIndex = function (idx) { activeSectionIndex = idx; renderMatrixTransform(); };
+    function animateStatsNumbers() { document.querySelectorAll(".stat-number").forEach(item => { if (item.innerText !== "0") return; let target = parseInt(item.getAttribute("data-val")), val = 0, step = target / 40, timer = setInterval(() => { val += step; if (val >= target) { clearInterval(timer); val = target; } item.innerText = Math.floor(val).toLocaleString() + "+"; }, 25); }); }
+    const modalOverlay = document.getElementById("modalOverlay"), modalTitle = document.getElementById("modalTitle");
+    window.openModal = function (type) { modalTitle.innerText = type === "explore" ? "Sovereign Target Access Port" : "Request Corporate Structuring Info"; modalOverlay.classList.add("active"); };
+    window.closeModal = function (ev) { if (!ev || ev.target === modalOverlay || ev.target.classList?.contains("modal-close")) modalOverlay.classList.remove("active"); };
+    window.handleSubmit = function (e) { e.preventDefault(); alert("✅ Portfolio submission logs updated."); modalOverlay.classList.remove("active"); };
+
+    // MAP SPECIFIC SCRIPTS
+    const mapOuter = document.getElementById('mapOuter'), mapCard = document.getElementById('mapCard'), mapShadow = document.getElementById('mapShadow'), MAX_TILT = 6;
+    if (mapOuter && mapCard) {
+      mapOuter.addEventListener('mousemove', e => { const rect = mapOuter.getBoundingClientRect(), cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2, dx = (e.clientX - cx) / (rect.width / 2), dy = (e.clientY - cy) / (rect.height / 2), rotY = dx * MAX_TILT, rotX = -dy * MAX_TILT; mapCard.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`; mapCard.style.boxShadow = `${-rotY * 4}px ${rotX * 4}px 90px rgba(0,0,0,0.8), 0 0 40px rgba(255,107,53,0.12), ${-rotY * 2}px ${rotX * 2}px 30px rgba(255,107,53,0.08)`; if (mapShadow) mapShadow.style.background = `radial-gradient(ellipse 65% 40% at ${50 + dx * 12}% ${50 + dy * 12}%,rgba(255,107,53,0.06),transparent 70%)`; });
+      mapOuter.addEventListener('mouseleave', () => { mapCard.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1), box-shadow 0.6s ease'; mapCard.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)'; mapCard.style.boxShadow = '0 30px 90px rgba(0,0,0,0.7),0 0 0 1px rgba(255,107,53,0.08)'; if (mapShadow) mapShadow.style.background = ''; setTimeout(() => { mapCard.style.transition = 'transform 0.12s linear, box-shadow 0.2s ease'; }, 650); });
+    }
+    const continentIds = ['north-america', 'south-america', 'europe', 'africa', 'asia', 'oceania'];
+    window.applyFilter = function () { const val = document.getElementById('regionFilter').value; continentIds.forEach(id => { const el = document.getElementById(id), lbl = document.getElementById('label-' + id); if (!el) return; if (val === 'all' || val === id) { el.classList.remove('dimmed', 'highlighted'); if (val !== 'all') el.classList.add('highlighted'); if (lbl) lbl.style.opacity = '1'; } else { el.classList.add('dimmed'); el.classList.remove('highlighted'); if (lbl) lbl.style.opacity = '0.25'; } }); document.querySelectorAll('.marker-group').forEach(m => { const mr = m.dataset.region; if (val === 'all' || mr === val) m.style.opacity = '1'; else m.style.opacity = '0.2'; }); };
+    const tooltip = document.getElementById('tooltip');
+    window.showTooltip = function (e, el) { if (!tooltip) return; tooltip.innerHTML = `<div class="tt-name">${el.dataset.name}</div><div class="tt-type">${el.dataset.type}</div><div class="tt-val">${el.dataset.val}</div>`; tooltip.style.opacity = '1'; moveTooltip(e); };
+    window.hideTooltip = function () { if (tooltip) tooltip.style.opacity = '0'; };
+    document.getElementById('worldMap')?.addEventListener('mousemove', e => { if (tooltip?.style.opacity === '1') moveTooltip(e); });
+    function moveTooltip(e) { if (!tooltip) return; const svgRect = document.getElementById('worldMap').getBoundingClientRect(); const containerRect = tooltip.closest('div')?.getBoundingClientRect(); if (!containerRect) return; let x = e.clientX - containerRect.left + 14, y = e.clientY - containerRect.top - 20; if (x + 180 > containerRect.width) x -= 200; if (y < 0) y = 10; tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px'; }
+    renderMatrixTransform();
+  </script>
+</body>
+
+</html>
